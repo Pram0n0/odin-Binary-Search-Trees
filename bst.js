@@ -119,6 +119,75 @@ class Tree {
         return values;
     }
 
+    // left root right
+    inOrder(position = this.root, values = [], callback) {
+        if (!position) {
+            return values;
+        }
+    
+        if (position.left) {
+            this.inOrder(position.left, values, callback);
+        }
+    
+        if (callback) {
+            callback(position);
+        } else {
+            values.push(position.data);
+        }
+    
+        if (position.right) {
+            this.inOrder(position.right, values, callback);
+        }
+    
+        return values;
+    }
+
+    preOrder(position = this.root, values = [], callback) {
+        if (!position) {
+            return values;
+        }
+    
+        if (callback) {
+            callback(position);
+        } else {
+            values.push(position.data);
+        }
+    
+        if (position.left) {
+            this.preOrder(position.left, values, callback);
+        }
+    
+        if (position.right) {
+            this.preOrder(position.right, values, callback);
+        }
+    
+        return values;
+    }
+
+    postOrder(position = this.root, values = [], callback) {
+        if (!position) {
+            return values;
+        }
+    
+        if (position.left) {
+            this.postOrder(position.left, values, callback);
+        }
+    
+        if (position.right) {
+            this.postOrder(position.right, values, callback);
+        }
+    
+        if (callback) {
+            callback(position);
+        } else {
+            values.push(position.data);
+        }
+
+        return values;
+    }
+
+
+
     height(position = this.root) {
         if (position === null) {
             return 0;
@@ -168,16 +237,52 @@ class Tree {
     }
 }
 
-      /**
-   * 3 methods for depth-first traversal
-   * Stack: Last In, First Out
-   * Preorder (root left right) and Postorder (left right root) uses stack.
-   * Inorder (left root right) uses iteration.
-   */
+function diver() {
+    const bst = new Tree(generateRandomNumbers(Math.floor(Math.random() * 100)));
 
+    if (bst.isBalanced()) {
+        console.log("Tree is balanced");
+    } else {
+        console.log("Tree is unbalanced");
+    }
 
+    console.log("Level Order:", bst.levelOrder());
+    console.log("In Order:", bst.inOrder());
+    console.log("Pre Order:", bst.preOrder());
+    console.log("Post Order:", bst.postOrder());
 
+    const numberOfValues = Math.ceil(Math.random() * 10);
 
-let tree = new Tree([1, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11]);
-console.log(tree)
-console.log(tree.isBalanced())
+    for (let i = 0; i < numberOfValues; i++) {
+        bst.insert(Math.floor(Math.random() * 100) + 100);
+    }
+
+    if (bst.isBalanced()) {
+        console.log("Tree is still balanced (should not happen)");
+    } else {
+        console.log("Tree is unbalanced");
+    }
+
+    bst.rebalance();
+
+    if (bst.isBalanced()) {
+        console.log("Tree is balanced after rebalancing");
+    } else {
+        console.log("Tree is unbalanced after rebalancing (should not happen)");
+    }
+
+    console.log("Level Order (after rebalance):", bst.levelOrder());
+    console.log("In Order (after rebalance):", bst.inOrder());
+    console.log("Pre Order (after rebalance):", bst.preOrder());
+    console.log("Post Order (after rebalance):", bst.postOrder());
+}
+
+function generateRandomNumbers(count) {
+    const randomNumbers = [];
+    for (let i = 0; i < count; i++) {
+        randomNumbers.push(Math.floor(Math.random() * 100));
+    }
+    return randomNumbers;
+}
+
+diver();
